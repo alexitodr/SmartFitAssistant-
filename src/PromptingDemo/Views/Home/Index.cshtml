@@ -1,0 +1,97 @@
+@model PromptingDemo.Models.PromptViewModel
+
+@{
+    ViewData["Title"] = "Prompting Demo";
+}
+
+<div class="container my-4 gym-page" style="max-width: 800px;">
+    <header class="mb-4 gym-header">
+        <p class="eyebrow">Bienvenidos</p>
+        <h1>Arma tu rutina</h1>
+    </header>
+
+    <form method="post" asp-action="Index" id="promptForm" class="gym-card p-4 mb-4">
+        <div class="mb-3">
+            <label for="selectedTechnique" class="form-label fw-bold gym-label">Técnica de prompting</label>
+            <select id="selectedTechnique" name="selectedTechnique" class="form-select gym-input">
+                @foreach (var technique in Model.AvailableTechniques)
+                {
+                    if (technique == Model.SelectedTechnique)
+                    {
+                        <option value="@technique" selected>@technique</option>
+                    }
+                    else
+                    {
+                        <option value="@technique">@technique</option>
+                    }
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="query" class="form-label fw-bold gym-label">Consulta</label>
+            <textarea id="query" name="query" class="form-control gym-input" rows="4"
+                      placeholder="Ej: dame una rutina de piernas para principiante...">@Model.Query</textarea>
+        </div>
+
+        <button type="submit" id="submitButton" class="btn gym-btn">
+            <span id="submitText">Ejecutar</span>
+            <span id="submitSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+        </button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.Error))
+    {
+        <div class="alert alert-danger mt-4">
+            <strong>Error:</strong> @Model.Error
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(Model.Response))
+    {
+        <div class="gym-card mt-4">
+            <div class="gym-card-header">
+                Respuesta <span class="gym-tag">@Model.SelectedTechnique</span>
+            </div>
+            <div class="gym-card-body">
+                <pre class="gym-response">@Model.Response</pre>
+            </div>
+        </div>
+    }
+
+    @if (Model.History.Count > 0)
+    {
+        <div class="mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="gym-label mb-0">Historial de la conversación</h5>
+                <form method="post" asp-action="ClearHistory">
+                    <button type="submit" class="btn btn-sm gym-btn-outline">Borrar historial</button>
+                </form>
+            </div>
+
+            @foreach (var item in Enumerable.Reverse(Model.History))
+            {
+                <div class="gym-card mb-3">
+                    <div class="gym-card-header">
+                        <span class="gym-tag">@item.Technique</span>
+                    </div>
+                    <div class="gym-card-body">
+                        <p class="gym-history-query"><strong>Pregunta:</strong> @item.Query</p>
+                        <pre class="gym-response">@item.Response</pre>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("promptForm").addEventListener("submit", function () {
+            const button = document.getElementById("submitButton");
+            button.disabled = true;
+            document.getElementById("submitText").textContent = "Procesando...";
+            document.getElementById("submitSpinner").classList.remove("d-none");
+        });
+    </script>
+}
