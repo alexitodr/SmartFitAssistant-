@@ -181,3 +181,32 @@ textarea.gym-input::placeholder {
     color: var(--text-muted);
     margin-bottom: 0.75rem;
 }
+.gym-disclaimer {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    border-left: 2px solid var(--accent);
+    padding-left: 0.75rem;
+    margin-top: 0.5rem;
+    max-width: 500px;
+}
+.gym-quick-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.gym-chip {
+    background-color: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+
+    .gym-chip:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }

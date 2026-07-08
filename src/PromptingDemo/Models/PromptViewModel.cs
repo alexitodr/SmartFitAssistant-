@@ -10,4 +10,5 @@ public class PromptViewModel
     public string? Response { get; set; }
     public string? Error { get; set; }
     public List<HistoryItem> History { get; set; } = new();
+    public UserProfile Profile { get; set; } = new();
 }
